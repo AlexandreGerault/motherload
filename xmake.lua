@@ -1,18 +1,18 @@
 add_rules("mode.debug", "mode.release")
-add_requires("libsdl3", "catch2")
+add_requires("libsdl3", "libsdl3_image", "catch2")
 
 target("motherload")
     set_languages("cxxlatest")
     set_kind("binary")
     add_files("src/**.cpp")
-    add_packages("libsdl3")
+    add_packages("libsdl3", "libsdl3_image")
 
 target("test")
     set_languages("cxxlatest")
     set_kind("binary")
     add_files("src/**.cpp|main.cpp")
     add_files("tests/*.cpp")
-    add_packages("libsdl3", "catch2")
+    add_packages("libsdl3", "libsdl3_image", "catch2")
 
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
