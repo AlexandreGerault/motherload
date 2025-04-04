@@ -10,9 +10,8 @@ using namespace mth;
 World::World() {
   registerSystem(std::make_unique<MovementSystem>());
 
-  m_textureRegistry.registerSurface(
-      surface_id::PLAYER_CROUCH_WALK,
-      "assets/run.png");
+  m_textureRegistry.registerSurface(surface_id::PLAYER_CROUCH_WALK,
+                                    "assets/run.png");
 }
 
 void World::registerSystem(std::unique_ptr<System> system) {

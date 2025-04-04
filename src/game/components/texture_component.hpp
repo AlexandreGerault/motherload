@@ -11,6 +11,6 @@ struct TextureComponent final : Component {
 
   SDL_Surface* m_surface;
 };
-}
+}  // namespace mth
 
-#endif //TEXTURE_COMPONENT_HPP
+#endif  // TEXTURE_COMPONENT_HPP

@@ -3,15 +3,14 @@
 #include "system.hpp"
 
 namespace mth {
-class InputSystem final: public System {
-public:
+class InputSystem final : public System {
+ public:
   InputSystem() = default;
 
   ~InputSystem() override = default;
 
   void update(World &world, float dt) override;
 };
-}
+}  // namespace mth
 
-
-#endif //INPUT_SYSTEM_HPP
+#endif  // INPUT_SYSTEM_HPP

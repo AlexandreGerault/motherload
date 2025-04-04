@@ -10,7 +10,11 @@ project(motherload LANGUAGES CXX)
 # target
 add_executable(motherload ""
         src/game/systems/input_system.cpp
-        src/game/systems/input_system.hpp)
+        src/game/systems/input_system.hpp
+        src/game/render/renderer.hpp
+        src/game/render/texture_id.hpp
+        src/game/render/sdl_renderer.cpp
+        src/game/render/sdl_renderer.hpp)
 set_target_properties(motherload PROPERTIES OUTPUT_NAME "motherload")
 set_target_properties(motherload PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/macosx/arm64/release")
 target_include_directories(motherload SYSTEM PRIVATE
