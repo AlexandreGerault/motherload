@@ -1,4 +1,5 @@
 #include "../src/game/world.hpp"
+#include "../src/game/components/physic_component.hpp"
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -6,12 +7,12 @@ TEST_CASE("A system can require the entities having a set of components", "[worl
 
     SECTION("Fetching entity with only one component")
     {
-        game::world world;
+        mth::World world;
 
-        world.spawn_entity({std::make_unique<game::physic>(0.0f,0.0f,0.0f,0.0f,0.0f,0.0f)});
-        world.spawn_entity({std::make_unique<game::inventory>()});
+        world.spawnEntity({std::make_unique<mth::PhysicComponent>(0.0f,0.0f,0.0f,0.0f,0.0f,0.0f)});
+        world.spawnEntity({std::make_unique<mth::InventoryComponent>()});
 
-        const auto physic_entities = world.having_components(game::component_types::Physic);
+        const auto physic_entities = world.havingComponents(mth::ComponentTypes::Physic);
         const auto first_matching_entity = physic_entities.at(0);
 
         REQUIRE(physic_entities.size() == 1);
@@ -20,15 +21,15 @@ TEST_CASE("A system can require the entities having a set of components", "[worl
 
     SECTION("Fetching entity having two specific components")
     {
-        game::world world;
+        mth::World world;
 
-        world.spawn_entity({
-            std::make_unique<game::physic>(0.0f,0.0f,0.0f,0.0f,0.0f,0.0f),
-            std::make_unique<game::inventory>()
+        world.spawnEntity({
+            std::make_unique<mth::PhysicComponent>(0.0f,0.0f,0.0f,0.0f,0.0f,0.0f),
+            std::make_unique<mth::InventoryComponent>()
         });
-        world.spawn_entity({std::make_unique<game::inventory>()});
+        world.spawnEntity({std::make_unique<mth::InventoryComponent>()});
 
-        const auto physic_entities = world.having_components(game::component_types::Physic | game::component_types::Inventory);
+        const auto physic_entities = world.havingComponents(mth::ComponentTypes::Physic | mth::ComponentTypes::Inventory);
         const auto first_matching_entity = physic_entities.at(0);
 
         REQUIRE(physic_entities.size() == 1);

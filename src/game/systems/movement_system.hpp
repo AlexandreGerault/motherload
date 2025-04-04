@@ -2,14 +2,14 @@
 #define MOVEMENT_SYSTEM_HPP
 #include "system.hpp"
 
-namespace game {
-class movement_system final : public system {
+namespace mth {
+class MovementSystem final : public System {
  public:
-  movement_system() = default;
-  ~movement_system() override = default;
+  MovementSystem() = default;
+  ~MovementSystem() override = default;
 
-  void update(world &world, float dt) override;
+  void update(World &world, float dt) override;
 };
-}  // namespace game
+}  // namespace mth
 
 #endif  // MOVEMENT_SYSTEM_HPP

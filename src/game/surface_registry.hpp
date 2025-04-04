@@ -10,9 +10,11 @@ enum surface_id {
   PLAYER_CROUCH_WALK,
 };
 
-class surface_registry {
+class SurfaceRegistry {
  public:
-  void register_surface(surface_id, std::string path);
+  ~SurfaceRegistry();
+  void registerSurface(surface_id, const std::string& path);
+  SDL_Surface* getSurface(surface_id id);
 
  private:
   std::unordered_map<surface_id, SDL_Surface*> m_surfaces{};

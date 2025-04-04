@@ -1,14 +1,14 @@
 #ifndef SYSTEM_HPP
 #define SYSTEM_HPP
 
-namespace game {
-class world;
+namespace mth {
+class World;
 
-class system {
+class System {
  public:
-  virtual ~system() = default;
-  virtual void update(world &world, float dt) = 0;
+  virtual ~System() = default;
+  virtual void update(World &world, float dt) = 0;
 };
-}  // namespace game
+}  // namespace mth
 
 #endif  // SYSTEM_HPP

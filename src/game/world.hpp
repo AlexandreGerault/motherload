@@ -10,36 +10,37 @@
 #include "surface_registry.hpp"
 #include "systems/system.hpp"
 
-namespace game {
-typedef uint32_t entity;
+namespace mth {
+typedef uint32_t Entity;
 
-struct entity_factory {
-  entity m_last;
+struct EntityFactory {
+  Entity m_last;
 
-  entity_factory() : m_last{0} {}
+  EntityFactory() : m_last{0} {}
 
-  entity create();
+  Entity create();
 };
 
-class world {
+class World {
  public:
-  world();
+  World();
 
-  void spawn_entity(component_list &&components);
-  void kill_entity(entity entity);
+  void spawnEntity(ComponentList &&components);
+  void killEntity(Entity entity);
 
-  void register_system(std::unique_ptr<system> system);
-  void remove_system(const system *system);
+  void registerSystem(std::unique_ptr<System> system);
 
   void update(float dt);
-  std::unordered_map<entity, component_list> having_components(int flags);
+  std::unordered_map<Entity, ComponentList> havingComponents(int flags);
+
+  SDL_Surface *getSurface(surface_id id);
 
  private:
-  std::unordered_map<entity, component_list> m_components;
-  std::vector<std::unique_ptr<system>> m_systems;
-  entity_factory m_entity_factory;
-  surface_registry m_texture_registry;
+  std::unordered_map<Entity, ComponentList> m_components;
+  std::vector<std::unique_ptr<System>> m_systems;
+  EntityFactory m_entityFactory;
+  SurfaceRegistry m_textureRegistry;
 };
-}  // namespace game
+}  // namespace mth
 
 #endif  // WORLD_HPP

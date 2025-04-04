@@ -4,17 +4,17 @@
 
 #include "system.hpp"
 
-namespace game {
-class render_system : public system {
+namespace mth {
+class RenderSystem : public System {
  public:
-  render_system() = delete;
-  explicit render_system(SDL_Renderer *renderer);
+  RenderSystem() = delete;
+  explicit RenderSystem(SDL_Renderer *renderer);
 
-  void update(world &world, float dt) override;
+  void update(World &world, float dt) override;
 
  private:
   SDL_Renderer *m_renderer;
 };
-}  // namespace game
+}  // namespace mth
 
 #endif  // RENDER_SYSTEM_HPP
