@@ -2,4 +2,5 @@
 
 using namespace mth;
 
-TextureComponent::TextureComponent(SDL_Surface* surface) : m_surface{surface} {}
+TextureComponent::TextureComponent(const TextureId textureId)
+    : m_textureId{textureId} {}

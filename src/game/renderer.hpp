@@ -1,6 +1,6 @@
 #ifndef RENDERER_HPP
 #define RENDERER_HPP
-#include "texture_id.hpp"
+#include "textures.hpp"
 
 namespace mth {
 class Renderer {

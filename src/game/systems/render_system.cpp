@@ -12,7 +12,8 @@
 
 using namespace mth;
 
-RenderSystem::RenderSystem(SDL_Renderer *renderer) : m_renderer(renderer) {}
+RenderSystem::RenderSystem(std::unique_ptr<Renderer> renderer)
+    : m_renderer{std::move(renderer)} {}
 
 void RenderSystem::update(World &world, float dt) {
   const auto entities = world.havingComponents(Physic | Texture);
@@ -40,18 +41,11 @@ void RenderSystem::update(World &world, float dt) {
     const auto texture_component =
         std::dynamic_pointer_cast<TextureComponent>(*texture_it);
 
-    SDL_Texture *texture{
-        SDL_CreateTextureFromSurface(m_renderer, texture_component->m_surface)};
-
-    if (!texture) {
-      SDL_Log("Failed to create texture from surface: %s", SDL_GetError());
-    }
+    m_renderer->render(texture_component->m_textureId, 0, pos_component->y, 35,
+                       40);
 
     SDL_FRect dstRect = {0, pos_component->y, 35.0, 40.0};
     SDL_FRect clipRect = {40.0, 40.0, 35.0, 40.0};
-    SDL_RenderTexture(m_renderer, texture, &clipRect, &dstRect);
-
-    SDL_DestroyTexture(texture);
 
     std::cout << "y: " << pos_component->y << "sy= " << pos_component->sy
               << "\n";

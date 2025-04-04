@@ -6,15 +6,21 @@
 
 #include <iostream>
 
+#include "./textures.hpp"
 #include "components/physic_component.hpp"
 #include "components/texture_component.hpp"
+#include "sdl/sdl_renderer.hpp"
 #include "systems/input_system.hpp"
 #include "systems/render_system.hpp"
 #include "world.hpp"
 
 using namespace mth;
 
-Game::Game() : m_exit{false}, m_window{nullptr}, m_renderer{nullptr} {
+Game::Game()
+    : m_exit{false},
+      m_textureRegistry{nullptr},
+      m_window{nullptr},
+      m_renderer{nullptr} {
   SDL_CreateWindowAndRenderer("SDL3 Tutorial", 860, 640, SDL_WINDOW_MAXIMIZED,
                               &m_window, &m_renderer);
 
@@ -25,6 +31,8 @@ Game::Game() : m_exit{false}, m_window{nullptr}, m_renderer{nullptr} {
   if (!m_renderer) {
     SDL_Log("Could not create renderer. SDL error: %s", SDL_GetError());
   }
+
+  m_textureRegistry = SdlTextureRegistry{m_renderer};
 }
 
 Game::~Game() {
@@ -39,7 +47,11 @@ void Game::loop() {
 
   World my_world{};
 
-  my_world.registerSystem(std::make_unique<RenderSystem>(m_renderer));
+  m_textureRegistry.registerTexture(PLAYER_RUN, "assets/run.png");
+  m_textureRegistry.registerTexture(PLAYER_FALL, "assets/fall.png");
+
+  my_world.registerSystem(std::make_unique<RenderSystem>(
+      std::make_unique<SdlRenderer>(m_renderer, m_textureRegistry)));
   my_world.registerSystem(std::make_unique<InputSystem>());
 
   ComponentList components{};
@@ -47,8 +59,7 @@ void Game::loop() {
   const auto physic_component =
       std::make_shared<PhysicComponent>(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 
-  const auto texture_component = std::make_shared<TextureComponent>(
-      my_world.getSurface(PLAYER_CROUCH_WALK));
+  const auto texture_component = std::make_shared<TextureComponent>(PLAYER_RUN);
 
   components.push_back(physic_component);
   components.push_back(texture_component);

@@ -1,15 +1,18 @@
 #ifndef TEXTURE_COMPONENT_HPP
 #define TEXTURE_COMPONENT_HPP
 
+#include <SDL3/SDL_render.h>
+
+#include "../textures.hpp"
 #include "component.hpp"
 
 namespace mth {
 struct TextureComponent final : Component {
   TextureComponent() = delete;
-  explicit TextureComponent(SDL_Surface* surface);
-  ComponentTypes getComponentType() override { return Texture; }
+  explicit TextureComponent(TextureId m_textureId);
+  ComponentTypes texture() override { return Texture; }
 
-  SDL_Surface* m_surface;
+  TextureId m_textureId;
 };
 }  // namespace mth
 

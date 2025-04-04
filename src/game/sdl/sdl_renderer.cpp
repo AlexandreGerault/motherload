@@ -4,7 +4,9 @@
 
 #include <memory>
 
-mth::SdlRenderer::SdlRenderer(SDL_Renderer* renderer) : m_renderer(renderer) {}
+mth::SdlRenderer::SdlRenderer(SDL_Renderer* renderer,
+                              SdlTextureRegistry& textureRegistry)
+    : m_renderer(renderer), m_textureRegistry(textureRegistry) {}
 
 void mth::SdlRenderer::render(TextureId surfaceId, float x, float y, float w,
                               float h) {

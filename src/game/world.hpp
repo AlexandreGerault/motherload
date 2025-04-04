@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "components/component.hpp"
-#include "surface_registry.hpp"
+#include "sdl/sdl_texture_registry.hpp"
 #include "systems/system.hpp"
 
 namespace mth {
@@ -33,13 +33,10 @@ class World {
   void update(float dt);
   std::unordered_map<Entity, ComponentList> havingComponents(int flags);
 
-  SDL_Surface *getSurface(surface_id id);
-
  private:
   std::unordered_map<Entity, ComponentList> m_components;
   std::vector<std::unique_ptr<System>> m_systems;
   EntityFactory m_entityFactory;
-  SurfaceRegistry m_textureRegistry;
 };
 }  // namespace mth
 

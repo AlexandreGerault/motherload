@@ -1,19 +1,21 @@
 #ifndef RENDER_SYSTEM_HPP
 #define RENDER_SYSTEM_HPP
-#include <SDL3/SDL_render.h>
 
+#include <memory>
+
+#include "../renderer.hpp"
 #include "system.hpp"
 
 namespace mth {
-class RenderSystem : public System {
+class RenderSystem final : public System {
  public:
   RenderSystem() = delete;
-  explicit RenderSystem(SDL_Renderer *renderer);
+  explicit RenderSystem(std::unique_ptr<Renderer> renderer);
 
   void update(World &world, float dt) override;
 
  private:
-  SDL_Renderer *m_renderer;
+  std::unique_ptr<Renderer> m_renderer;
 };
 }  // namespace mth
 

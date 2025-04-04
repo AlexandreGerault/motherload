@@ -14,11 +14,11 @@ enum ComponentTypes {
 
 struct Component {
   virtual ~Component() = default;
-  virtual ComponentTypes getComponentType() = 0;
+  virtual ComponentTypes texture() = 0;
 };
 
 struct InventoryComponent final : Component {
-  ComponentTypes getComponentType() override { return Inventory; }
+  ComponentTypes texture() override { return Inventory; }
 };
 
 typedef std::vector<std::shared_ptr<Component>> ComponentList;

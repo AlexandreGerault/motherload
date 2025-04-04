@@ -1,18 +1,12 @@
 #include "world.hpp"
 
 #include <ostream>
-#include <ranges>
 
 #include "systems/movement_system.hpp"
 
 using namespace mth;
 
-World::World() {
-  registerSystem(std::make_unique<MovementSystem>());
-
-  m_textureRegistry.registerSurface(surface_id::PLAYER_CROUCH_WALK,
-                                    "assets/run.png");
-}
+World::World() { registerSystem(std::make_unique<MovementSystem>()); }
 
 void World::registerSystem(std::unique_ptr<System> system) {
   m_systems.push_back(std::move(system));
@@ -39,7 +33,7 @@ std::unordered_map<Entity, ComponentList> World::havingComponents(int flags) {
     int found_flags = 0;
 
     for (const auto &component : components) {
-      found_flags |= component->getComponentType();
+      found_flags |= component->texture();
     }
 
     if ((found_flags & flags) == flags) {
@@ -51,7 +45,3 @@ std::unordered_map<Entity, ComponentList> World::havingComponents(int flags) {
 }
 
 Entity EntityFactory::create() { return m_last++; }
-
-SDL_Surface *World::getSurface(surface_id id) {
-  return m_textureRegistry.getSurface(id);
-}
