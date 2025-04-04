@@ -2,4 +2,4 @@
 
 using namespace mth;
 
-ComponentTypes PhysicComponent::texture() { return Physic; }
+ComponentTypes PhysicComponent::type() { return Physic; }

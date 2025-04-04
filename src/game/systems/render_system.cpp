@@ -27,7 +27,7 @@ void RenderSystem::update(World &world, float dt) {
 
     auto texture_it =
         std::ranges::find_if(components, [](const auto &component) {
-          return std::dynamic_pointer_cast<TextureComponent>(component) !=
+          return std::dynamic_pointer_cast<StaticSpriteComponent>(component) !=
                  nullptr;
         });
 
@@ -39,15 +39,12 @@ void RenderSystem::update(World &world, float dt) {
     const auto pos_component =
         std::dynamic_pointer_cast<PhysicComponent>(*physic_it);
     const auto texture_component =
-        std::dynamic_pointer_cast<TextureComponent>(*texture_it);
+        std::dynamic_pointer_cast<StaticSpriteComponent>(*texture_it);
 
-    m_renderer->render(texture_component->m_textureId, 0, pos_component->y, 35,
-                       40);
-
-    SDL_FRect dstRect = {0, pos_component->y, 35.0, 40.0};
-    SDL_FRect clipRect = {40.0, 40.0, 35.0, 40.0};
-
-    std::cout << "y: " << pos_component->y << "sy= " << pos_component->sy
-              << "\n";
+    m_renderer->render(
+        texture_component->m_textureId,
+        Rectangle{pos_component->x, pos_component->y,
+                  texture_component->m_clip.width, texture_component->m_clip.height},
+        texture_component->m_clip);
   }
 }

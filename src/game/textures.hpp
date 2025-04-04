@@ -4,6 +4,8 @@
 enum TextureId {
   PLAYER_FALL,
   PLAYER_RUN,
+
+  DIRT,
 };
 
 #endif  // TEXTURE_ID_HPP

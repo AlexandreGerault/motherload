@@ -48,7 +48,8 @@ void Game::loop() {
   World my_world{};
 
   m_textureRegistry.registerTexture(PLAYER_RUN, "assets/run.png");
-  m_textureRegistry.registerTexture(PLAYER_FALL, "assets/fall.png");
+  // m_textureRegistry.registerTexture(PLAYER_FALL, "assets/fall.png");
+  m_textureRegistry.registerTexture(DIRT, "assets/default_dirt.png");
 
   my_world.registerSystem(std::make_unique<RenderSystem>(
       std::make_unique<SdlRenderer>(m_renderer, m_textureRegistry)));
@@ -56,15 +57,25 @@ void Game::loop() {
 
   ComponentList components{};
 
+  // DIRT BLOCK
+  const auto dirt_texture_component = std::make_shared<StaticSpriteComponent>(
+      DIRT, Rectangle{0, 0, 16.0f, 16.0f});
+  const auto dirt_physic_component =
+      std::make_shared<PhysicComponent>(100.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+  // KNIGHT
+  const auto texture_component = std::make_shared<StaticSpriteComponent>(
+      PLAYER_RUN, Rectangle{40.f, 40.f, 35.f, 40.f});
   const auto physic_component =
       std::make_shared<PhysicComponent>(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-
-  const auto texture_component = std::make_shared<TextureComponent>(PLAYER_RUN);
 
   components.push_back(physic_component);
   components.push_back(texture_component);
 
-  my_world.spawnEntity(std::move(components));
+  my_world.spawnEntity(ComponentList{physic_component, texture_component});
+
+  my_world.spawnEntity(
+      ComponentList{dirt_texture_component, dirt_physic_component});
 
   Uint64 NOW = SDL_GetPerformanceCounter();
   Uint64 LAST = 0;

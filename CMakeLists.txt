@@ -8,13 +8,7 @@ cmake_policy(SET CMP0091 NEW)
 project(motherload LANGUAGES CXX)
 
 # target
-add_executable(motherload ""
-        src/game/systems/input_system.cpp
-        src/game/systems/input_system.hpp
-        src/game/render/renderer.hpp
-        src/game/render/texture_id.hpp
-        src/game/render/sdl_renderer.cpp
-        src/game/render/sdl_renderer.hpp)
+add_executable(motherload "")
 set_target_properties(motherload PROPERTIES OUTPUT_NAME "motherload")
 set_target_properties(motherload PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/macosx/arm64/release")
 target_include_directories(motherload SYSTEM PRIVATE
@@ -87,10 +81,15 @@ target_link_options(motherload PRIVATE
     -lz
 )
 target_sources(motherload PRIVATE
-    src/game/surface_registry.cpp
     src/game/components/component.cpp
     src/game/components/physic_component.cpp
-    src/game/components/texture_component.cpp
+        src/game/components/static_sprite_component.cpp
+    src/game/sdl/sdl_renderer.cpp
+    src/game/sdl/sdl_texture_registry.cpp
+    src/game/texture_registry.cpp
+    src/game/maths/rectangle.cpp
+    src/game/maths/vec_2.cpp
+    src/game/systems/input_system.cpp
     src/game/systems/render_system.cpp
     src/game/systems/system.cpp
     src/game/systems/movement_system.cpp
@@ -177,10 +176,15 @@ target_link_options(test PRIVATE
     -lz
 )
 target_sources(test PRIVATE
-    src/game/surface_registry.cpp
     src/game/components/component.cpp
     src/game/components/physic_component.cpp
-    src/game/components/texture_component.cpp
+        src/game/components/static_sprite_component.cpp
+    src/game/sdl/sdl_renderer.cpp
+    src/game/sdl/sdl_texture_registry.cpp
+    src/game/texture_registry.cpp
+    src/game/maths/rectangle.cpp
+    src/game/maths/vec_2.cpp
+    src/game/systems/input_system.cpp
     src/game/systems/render_system.cpp
     src/game/systems/system.cpp
     src/game/systems/movement_system.cpp

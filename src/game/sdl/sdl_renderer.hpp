@@ -12,7 +12,8 @@ class SdlRenderer final : public Renderer {
                        SdlTextureRegistry& textureRegistry);
   ~SdlRenderer() override = default;
 
-  void render(TextureId surfaceId, float x, float y, float w, float h) override;
+  void render(TextureId surfaceId, Rectangle destination,
+              Rectangle clip) override;
 
  private:
   SDL_Renderer* m_renderer;

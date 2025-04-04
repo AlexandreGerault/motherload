@@ -28,13 +28,6 @@ void SdlTextureRegistry::registerTexture(TextureId id,
 }
 
 SDL_Texture* SdlTextureRegistry::get(const TextureId id) {
-  std::cout << m_textures.size() << "\n";
-
-  for (const auto& texture : m_textures) {
-    std::cout << texture.first << "\n";
-    std::cout << texture.second << "\n";
-  }
-
   auto it = m_textures.find(id);
 
   if (it != m_textures.end()) {

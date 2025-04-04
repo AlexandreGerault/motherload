@@ -4,6 +4,8 @@
 
 namespace mth {
 struct PhysicComponent final : Component {
+  bool gravityEnabled{false};
+
   float x;
   float y;
 
@@ -19,7 +21,7 @@ struct PhysicComponent final : Component {
                   const float _sy, const float _ax, const float _ay)
       : x{_x}, y{_y}, sx{_sx}, sy{_sy}, ax{_ax}, ay{_ay} {};
 
-  ComponentTypes texture() override;
+  ComponentTypes type() override;
 };
 }  // namespace mth
 

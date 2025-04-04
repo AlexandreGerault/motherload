@@ -33,7 +33,7 @@ std::unordered_map<Entity, ComponentList> World::havingComponents(int flags) {
     int found_flags = 0;
 
     for (const auto &component : components) {
-      found_flags |= component->texture();
+      found_flags |= component->type();
     }
 
     if ((found_flags & flags) == flags) {
