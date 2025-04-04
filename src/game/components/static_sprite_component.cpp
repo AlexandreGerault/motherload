@@ -3,5 +3,7 @@
 using namespace mth;
 
 StaticSpriteComponent::StaticSpriteComponent(const TextureId textureId,
-                                             const Rectangle rectangle)
-    : m_textureId{textureId}, m_clip{rectangle} {}
+                                             const Rectangle clip)
+    : m_textureId{textureId}, m_clip{clip} {}
+
+ComponentTypes StaticSpriteComponent::type() { return StaticSprite; }

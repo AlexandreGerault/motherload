@@ -8,7 +8,9 @@ cmake_policy(SET CMP0091 NEW)
 project(motherload LANGUAGES CXX)
 
 # target
-add_executable(motherload "")
+add_executable(motherload ""
+        src/game/components/animated_sprite_component.cpp
+        src/game/components/animated_sprite_component.hpp)
 set_target_properties(motherload PROPERTIES OUTPUT_NAME "motherload")
 set_target_properties(motherload PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/macosx/arm64/release")
 target_include_directories(motherload SYSTEM PRIVATE

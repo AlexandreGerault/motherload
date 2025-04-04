@@ -7,8 +7,9 @@
 #include <iostream>
 
 #include "./textures.hpp"
+#include "components/animated_sprite_component.hpp"
 #include "components/physic_component.hpp"
-#include "components/texture_component.hpp"
+#include "components/static_sprite_component.hpp"
 #include "sdl/sdl_renderer.hpp"
 #include "systems/input_system.hpp"
 #include "systems/render_system.hpp"
@@ -48,7 +49,6 @@ void Game::loop() {
   World my_world{};
 
   m_textureRegistry.registerTexture(PLAYER_RUN, "assets/run.png");
-  // m_textureRegistry.registerTexture(PLAYER_FALL, "assets/fall.png");
   m_textureRegistry.registerTexture(DIRT, "assets/default_dirt.png");
 
   my_world.registerSystem(std::make_unique<RenderSystem>(
@@ -64,8 +64,14 @@ void Game::loop() {
       std::make_shared<PhysicComponent>(100.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 
   // KNIGHT
-  const auto texture_component = std::make_shared<StaticSpriteComponent>(
-      PLAYER_RUN, Rectangle{40.f, 40.f, 35.f, 40.f});
+  std::vector clips{
+    Rectangle{40.f, 40.f, 35.0f, 40.0f},
+    Rectangle{160.f, 40.f, 30.0f, 40.0f},
+    Rectangle{285.0f, 40.f, 30.0f, 40.0f},
+    Rectangle{404.f, 40.f, 20.0f, 40.0f}
+  };
+  const auto texture_component =
+      std::make_shared<AnimatedSpriteComponent>(PLAYER_RUN, clips, 13);
   const auto physic_component =
       std::make_shared<PhysicComponent>(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 

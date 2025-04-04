@@ -10,8 +10,8 @@ using namespace math;
 
 struct StaticSpriteComponent final : Component {
   StaticSpriteComponent() = delete;
-  explicit StaticSpriteComponent(TextureId m_textureId, Rectangle rectangle);
-  ComponentTypes type() override { return Texture; }
+  explicit StaticSpriteComponent(TextureId m_textureId, Rectangle clip);
+  ComponentTypes type() override;
 
   TextureId m_textureId;
   Rectangle m_clip;
