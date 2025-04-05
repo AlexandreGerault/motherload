@@ -61,10 +61,10 @@ void Game::loop() {
       std::make_shared<PhysicComponent>(100.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 
   // KNIGHT
-  const auto texture_component =
-    std::make_shared<AnimatedSpriteComponent>(PLAYER_RUN, m_animationRegistry.get(PLAYER_RUN), 13);
-  const auto fall_texture_component =
-      std::make_shared<AnimatedSpriteComponent>(PLAYER_FALL, m_animationRegistry.get(PLAYER_FALL), 13);
+  const auto texture_component = std::make_shared<AnimatedSpriteComponent>(
+      PLAYER_RUN, m_animationRegistry.get(PLAYER_RUN), 13);
+  const auto fall_texture_component = std::make_shared<AnimatedSpriteComponent>(
+      PLAYER_FALL, m_animationRegistry.get(PLAYER_FALL), 13);
   const auto physic_component =
       std::make_shared<PhysicComponent>(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 

@@ -78,11 +78,13 @@ void RenderSystem::update(World &world, float dt) {
 
     texture_component->elapsedTime += dt;
 
-    std::cout << "1/framerate: " << 1.0f/ static_cast<float>(texture_component->framerate) << "\n";
+    std::cout << "1/framerate: "
+              << 1.0f / static_cast<float>(texture_component->framerate)
+              << "\n";
 
-    const int frame = static_cast<int>(
-        (texture_component->elapsedTime) * texture_component->framerate) %
-        static_cast<int>(texture_component->clips.size());
+    const int frame = static_cast<int>((texture_component->elapsedTime) *
+                                       texture_component->framerate) %
+                      static_cast<int>(texture_component->clips.size());
 
     std::cout << "Elapsed time: " << texture_component->elapsedTime << "\n";
     std::cout << "Frame: " << frame << "\n";
