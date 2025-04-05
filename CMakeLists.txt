@@ -8,9 +8,7 @@ cmake_policy(SET CMP0091 NEW)
 project(motherload LANGUAGES CXX)
 
 # target
-add_executable(motherload ""
-        src/game/components/animated_sprite_component.cpp
-        src/game/components/animated_sprite_component.hpp)
+add_executable(motherload "")
 set_target_properties(motherload PROPERTIES OUTPUT_NAME "motherload")
 set_target_properties(motherload PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build/macosx/arm64/release")
 target_include_directories(motherload SYSTEM PRIVATE
@@ -84,8 +82,9 @@ target_link_options(motherload PRIVATE
 )
 target_sources(motherload PRIVATE
     src/game/components/component.cpp
+    src/game/components/animated_sprite_component.cpp
     src/game/components/physic_component.cpp
-        src/game/components/static_sprite_component.cpp
+    src/game/components/static_sprite_component.cpp
     src/game/sdl/sdl_renderer.cpp
     src/game/sdl/sdl_texture_registry.cpp
     src/game/texture_registry.cpp
@@ -96,6 +95,7 @@ target_sources(motherload PRIVATE
     src/game/systems/system.cpp
     src/game/systems/movement_system.cpp
     src/game/world.cpp
+    src/game/animation_registry.cpp
     src/game/game.cpp
     src/main.cpp
 )
@@ -179,8 +179,9 @@ target_link_options(test PRIVATE
 )
 target_sources(test PRIVATE
     src/game/components/component.cpp
+    src/game/components/animated_sprite_component.cpp
     src/game/components/physic_component.cpp
-        src/game/components/static_sprite_component.cpp
+    src/game/components/static_sprite_component.cpp
     src/game/sdl/sdl_renderer.cpp
     src/game/sdl/sdl_texture_registry.cpp
     src/game/texture_registry.cpp
@@ -191,6 +192,7 @@ target_sources(test PRIVATE
     src/game/systems/system.cpp
     src/game/systems/movement_system.cpp
     src/game/world.cpp
+    src/game/animation_registry.cpp
     src/game/game.cpp
     tests/world.cpp
 )

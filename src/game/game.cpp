@@ -17,11 +17,7 @@
 
 using namespace mth;
 
-Game::Game()
-    : m_exit{false},
-      m_textureRegistry{nullptr},
-      m_window{nullptr},
-      m_renderer{nullptr} {
+Game::Game() {
   SDL_CreateWindowAndRenderer("SDL3 Tutorial", 860, 640, SDL_WINDOW_MAXIMIZED,
                               &m_window, &m_renderer);
 
@@ -49,6 +45,7 @@ void Game::loop() {
   World my_world{};
 
   m_textureRegistry.registerTexture(PLAYER_RUN, "assets/run.png");
+  m_textureRegistry.registerTexture(PLAYER_FALL, "assets/fall.png");
   m_textureRegistry.registerTexture(DIRT, "assets/default_dirt.png");
 
   my_world.registerSystem(std::make_unique<RenderSystem>(
@@ -64,21 +61,17 @@ void Game::loop() {
       std::make_shared<PhysicComponent>(100.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 
   // KNIGHT
-  std::vector clips{
-    Rectangle{40.f, 40.f, 35.0f, 40.0f},
-    Rectangle{160.f, 40.f, 30.0f, 40.0f},
-    Rectangle{285.0f, 40.f, 30.0f, 40.0f},
-    Rectangle{404.f, 40.f, 20.0f, 40.0f}
-  };
   const auto texture_component =
-      std::make_shared<AnimatedSpriteComponent>(PLAYER_RUN, clips, 13);
+    std::make_shared<AnimatedSpriteComponent>(PLAYER_RUN, m_animationRegistry.get(PLAYER_RUN), 13);
+  const auto fall_texture_component =
+      std::make_shared<AnimatedSpriteComponent>(PLAYER_FALL, m_animationRegistry.get(PLAYER_FALL), 13);
   const auto physic_component =
       std::make_shared<PhysicComponent>(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 
   components.push_back(physic_component);
   components.push_back(texture_component);
 
-  my_world.spawnEntity(ComponentList{physic_component, texture_component});
+  my_world.spawnEntity(ComponentList{physic_component, fall_texture_component});
 
   my_world.spawnEntity(
       ComponentList{dirt_texture_component, dirt_physic_component});
