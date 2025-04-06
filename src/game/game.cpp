@@ -61,7 +61,7 @@ void Game::loop() {
       std::make_shared<PhysicComponent>(100.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 
   // KNIGHT
-  const auto texture_component = std::make_shared<AnimatedSpriteComponent>(
+  const auto run_texture_component = std::make_shared<AnimatedSpriteComponent>(
       PLAYER_RUN, m_animationRegistry.get(PLAYER_RUN), 13);
   const auto fall_texture_component = std::make_shared<AnimatedSpriteComponent>(
       PLAYER_FALL, m_animationRegistry.get(PLAYER_FALL), 13);
@@ -69,9 +69,9 @@ void Game::loop() {
       std::make_shared<PhysicComponent>(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 
   components.push_back(physic_component);
-  components.push_back(texture_component);
+  components.push_back(run_texture_component);
 
-  my_world.spawnEntity(ComponentList{physic_component, fall_texture_component});
+  my_world.spawnEntity(ComponentList{physic_component, run_texture_component});
 
   my_world.spawnEntity(
       ComponentList{dirt_texture_component, dirt_physic_component});
@@ -91,6 +91,38 @@ void Game::loop() {
     while (SDL_PollEvent(&e)) {
       if (e.type == SDL_EVENT_QUIT) {
         m_exit = true;
+      }
+
+      if (e.type == SDL_EVENT_KEY_DOWN) {
+        if (e.key.key == SDLK_RIGHT) {
+          physic_component->sx = 100.0f;
+        }
+
+        if (e.key.key == SDLK_LEFT) {
+          physic_component->sx = -100.0f;
+        }
+
+        if (e.key.key == SDLK_UP) {
+          physic_component->ay += 100.0f;
+        }
+      }
+
+      if (e.type == SDL_EVENT_KEY_UP) {
+        if (e.key.key == SDLK_RIGHT) {
+          physic_component->sx = 0.0f;
+        }
+
+        if (e.key.key == SDLK_LEFT) {
+          physic_component->sx = 0.0f;
+        }
+
+        if (e.key.key == SDLK_UP) {
+          physic_component->ay += 100.0f;
+        }
+
+        if (e.key.key == SDLK_UP) {
+          physic_component->ay += 0.0f;
+        }
       }
     }
 
