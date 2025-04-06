@@ -27,7 +27,7 @@ void MovementSystem::update(World &world, const float dt) {
     const auto pos_component =
         std::dynamic_pointer_cast<PhysicComponent>(*physic_it);
 
-    pos_component->x += 0.0f * dt;
+    pos_component->x += pos_component->sx * dt;
 
     pos_component->sy += 40.0f * 9.81 * dt;
     pos_component->y += pos_component->sy * dt;
