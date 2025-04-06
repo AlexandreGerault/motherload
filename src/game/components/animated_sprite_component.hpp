@@ -13,6 +13,10 @@ struct AnimatedSpriteComponent final : Component {
                                    std::vector<math::Rectangle> clips,
                                    int framerate);
 
+  int currentFrameIndex() const;
+  math::Rectangle getCurrentClip() const;
+  void addTime(float dt);
+
   float elapsedTime{0};
   int framerate{};
   TextureId textureId;

@@ -76,28 +76,13 @@ void RenderSystem::update(World &world, float dt) {
     const auto texture_component =
         std::dynamic_pointer_cast<AnimatedSpriteComponent>(*texture_it);
 
-    texture_component->elapsedTime += dt;
-
-    std::cout << "1/framerate: "
-              << 1.0f / static_cast<float>(texture_component->framerate)
-              << "\n";
-
-    const int frame = static_cast<int>((texture_component->elapsedTime) *
-                                       texture_component->framerate) %
-                      static_cast<int>(texture_component->clips.size());
-
-    std::cout << "Elapsed time: " << texture_component->elapsedTime << "\n";
-    std::cout << "Frame: " << frame << "\n";
-
-    const auto currentClip = texture_component->clips[frame];
+    const Rectangle currentClip = texture_component->getCurrentClip();
 
     m_renderer->render(texture_component->textureId,
                        Rectangle{pos_component->x, pos_component->y,
                                  currentClip.width, currentClip.height},
                        currentClip);
 
-    if (frame == texture_component->clips.size() - 1) {
-      texture_component->elapsedTime = 0.0f;
-    }
+    texture_component->addTime(dt);
   }
 }
