@@ -95,5 +95,9 @@ void RenderSystem::update(World &world, float dt) {
                        Rectangle{pos_component->x, pos_component->y,
                                  currentClip.width, currentClip.height},
                        currentClip);
+
+    if (frame == texture_component->clips.size() - 1) {
+      texture_component->elapsedTime = 0.0f;
+    }
   }
 }
