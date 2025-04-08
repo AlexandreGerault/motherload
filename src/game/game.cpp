@@ -8,18 +8,20 @@
 
 #include "./textures.hpp"
 #include "components/animated_sprite_component.hpp"
-#include "components/physic_component.hpp"
+#include "components/rigid_body_component.hpp"
 #include "components/static_sprite_component.hpp"
+#include "components/transform_component.hpp"
 #include "sdl/sdl_renderer.hpp"
 #include "systems/input_system.hpp"
 #include "systems/render_system.hpp"
 #include "world.hpp"
 
 using namespace mth;
+using mth::components::TransformComponent;
 
 Game::Game() {
-  SDL_CreateWindowAndRenderer("SDL3 Tutorial", 860, 640, SDL_WINDOW_MAXIMIZED,
-                              &m_window, &m_renderer);
+  SDL_CreateWindowAndRenderer("Motherload Rebirth", 860, 640,
+                              SDL_WINDOW_MAXIMIZED, &m_window, &m_renderer);
 
   if (!m_window) {
     SDL_Log("Could not create window. SDL error: %s", SDL_GetError());
@@ -52,26 +54,35 @@ void Game::loop() {
       std::make_unique<SdlRenderer>(m_renderer, m_textureRegistry)));
   my_world.registerSystem(std::make_unique<InputSystem>());
 
-  ComponentList components{};
+  ComponentList player_components{};
 
   // DIRT BLOCK
   const auto dirt_texture_component = std::make_shared<StaticSpriteComponent>(
       DIRT, Rectangle{0, 0, 16.0f, 16.0f});
-  const auto dirt_physic_component =
-      std::make_shared<PhysicComponent>(100.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+  const auto dirt_physic_component = std::make_shared<RigidBodyComponent>(
+      100.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 
   // KNIGHT
   const auto run_texture_component = std::make_shared<AnimatedSpriteComponent>(
       PLAYER_RUN, m_animationRegistry.get(PLAYER_RUN), 13);
   const auto fall_texture_component = std::make_shared<AnimatedSpriteComponent>(
       PLAYER_FALL, m_animationRegistry.get(PLAYER_FALL), 13);
-  const auto physic_component =
-      std::make_shared<PhysicComponent>(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+  const auto rigid_body_component =
+      std::make_shared<RigidBodyComponent>(RigidBodyComponentBuilder{}
+                                               .withMass(100.0f)
+                                               .withCollision()
+                                               .withGravity()
+                                               .withDrag(1.f)
+                                               .create());
 
-  components.push_back(physic_component);
-  components.push_back(run_texture_component);
+  const auto transform_component = std::make_shared<TransformComponent>();
 
-  my_world.spawnEntity(ComponentList{physic_component, run_texture_component});
+  player_components.push_back(rigid_body_component);
+  player_components.push_back(run_texture_component);
+  player_components.push_back(transform_component);
+
+  my_world.spawnEntity(
+      ComponentList{rigid_body_component, run_texture_component});
 
   my_world.spawnEntity(
       ComponentList{dirt_texture_component, dirt_physic_component});
@@ -95,33 +106,33 @@ void Game::loop() {
 
       if (e.type == SDL_EVENT_KEY_DOWN) {
         if (e.key.key == SDLK_RIGHT) {
-          physic_component->sx = 100.0f;
+          transform_component->velocity.x = 100.0f;
         }
 
         if (e.key.key == SDLK_LEFT) {
-          physic_component->sx = -100.0f;
+          transform_component->velocity.x = -100.0f;
         }
 
         if (e.key.key == SDLK_UP) {
-          physic_component->ay += 100.0f;
+          transform_component->acceleration.y += 100.0f;
         }
       }
 
       if (e.type == SDL_EVENT_KEY_UP) {
         if (e.key.key == SDLK_RIGHT) {
-          physic_component->sx = 0.0f;
+          transform_component->velocity.x = 0.0f;
         }
 
         if (e.key.key == SDLK_LEFT) {
-          physic_component->sx = 0.0f;
+          transform_component->velocity.x = 0.0f;
         }
 
         if (e.key.key == SDLK_UP) {
-          physic_component->ay += 100.0f;
+          transform_component->acceleration.y += 100.0f;
         }
 
         if (e.key.key == SDLK_UP) {
-          physic_component->ay += 0.0f;
+          transform_component->acceleration.y += 0.0f;
         }
       }
     }

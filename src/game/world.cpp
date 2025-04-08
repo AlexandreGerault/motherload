@@ -2,11 +2,11 @@
 
 #include <ostream>
 
-#include "systems/movement_system.hpp"
+#include "systems/physic_system.hpp"
 
 using namespace mth;
 
-World::World() { registerSystem(std::make_unique<MovementSystem>()); }
+World::World() { registerSystem(std::make_unique<PhysicSystem>()); }
 
 void World::registerSystem(std::unique_ptr<System> system) {
   m_systems.push_back(std::move(system));

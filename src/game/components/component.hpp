@@ -7,10 +7,11 @@
 
 namespace mth {
 enum ComponentTypes {
-  Physic = 1 << 0,
-  Inventory = 1 << 1,
-  StaticSprite = 1 << 2,
-  AnimatedSprite = 1 << 3,
+  RigidBody = 1 << 0,
+  Transform = 1 << 1,
+  Inventory = 1 << 2,
+  StaticSprite = 1 << 3,
+  AnimatedSprite = 1 << 4,
 };
 
 struct Component {

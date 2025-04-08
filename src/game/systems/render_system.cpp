@@ -5,7 +5,7 @@
 #include <ranges>
 
 #include "../components/animated_sprite_component.hpp"
-#include "../components/physic_component.hpp"
+#include "../components/rigid_body_component.hpp"
 #include "../components/static_sprite_component.hpp"
 #include "../world.hpp"
 
@@ -18,12 +18,12 @@ RenderSystem::RenderSystem(std::unique_ptr<Renderer> renderer)
 
 void RenderSystem::update(World &world, float dt) {
   const auto static_sprite_entities =
-      world.havingComponents(Physic | StaticSprite);
+      world.havingComponents(RigidBody | StaticSprite);
 
   for (const auto &components : static_sprite_entities | std::views::values) {
     auto physic_it =
         std::ranges::find_if(components, [](const auto &component) {
-          return std::dynamic_pointer_cast<PhysicComponent>(component) !=
+          return std::dynamic_pointer_cast<RigidBodyComponent>(component) !=
                  nullptr;
         });
 
@@ -39,7 +39,7 @@ void RenderSystem::update(World &world, float dt) {
 
     // Cast the component to position type
     const auto pos_component =
-        std::dynamic_pointer_cast<PhysicComponent>(*physic_it);
+        std::dynamic_pointer_cast<RigidBodyComponent>(*physic_it);
     const auto texture_component =
         std::dynamic_pointer_cast<StaticSpriteComponent>(*texture_it);
 
@@ -51,12 +51,12 @@ void RenderSystem::update(World &world, float dt) {
   }
 
   const auto animated_sprite_entities =
-      world.havingComponents(Physic | AnimatedSprite);
+      world.havingComponents(RigidBody | AnimatedSprite);
 
   for (const auto &components : animated_sprite_entities | std::views::values) {
     auto physic_it =
         std::ranges::find_if(components, [](const auto &component) {
-          return std::dynamic_pointer_cast<PhysicComponent>(component) !=
+          return std::dynamic_pointer_cast<RigidBodyComponent>(component) !=
                  nullptr;
         });
 
@@ -72,7 +72,7 @@ void RenderSystem::update(World &world, float dt) {
 
     // Cast the component to position type
     const auto pos_component =
-        std::dynamic_pointer_cast<PhysicComponent>(*physic_it);
+        std::dynamic_pointer_cast<RigidBodyComponent>(*physic_it);
     const auto texture_component =
         std::dynamic_pointer_cast<AnimatedSpriteComponent>(*texture_it);
 
