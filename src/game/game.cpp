@@ -4,7 +4,11 @@
 #include <SDL3/SDL_log.h>
 #include <SDL3/SDL_timer.h>
 
+#include <iostream>
+#include <memory>
+
 #include "components/animated_sprite_component.hpp"
+#include "components/input_component.hpp"
 #include "components/rigid_body_component.hpp"
 #include "components/static_sprite_component.hpp"
 #include "components/transform_component.hpp"
@@ -77,11 +81,12 @@ void Game::loop() {
                                                .withGravity()
                                                .withDrag(0.f)
                                                .create());
+  const auto inputComponent = std::make_shared<InputComponent>();
 
   const auto transformComponent = std::make_shared<TransformComponent>();
 
   myWorld.spawnEntity(ComponentList{rigidBodyComponent, transformComponent,
-                                    runTextureComponent});
+                                    runTextureComponent, inputComponent});
 
   Uint64 NOW = SDL_GetPerformanceCounter();
   Uint64 LAST = 0;
@@ -94,6 +99,8 @@ void Game::loop() {
     deltaTime = static_cast<float>(NOW - LAST) * 1000 /
                 static_cast<float>(SDL_GetPerformanceFrequency());
 
+    std::cout << "Up? " << inputComponent->hasFlag(InputFlags::Up) << std::endl;
+
     // Process events
     while (SDL_PollEvent(&e)) {
       if (e.type == SDL_EVENT_QUIT) {
@@ -102,29 +109,29 @@ void Game::loop() {
 
       if (e.type == SDL_EVENT_KEY_DOWN) {
         if (e.key.key == SDLK_RIGHT) {
-          transformComponent->velocity.x = 240.0f;
+          inputComponent->enableFlag(InputFlags::Right);
         }
 
         if (e.key.key == SDLK_LEFT) {
-          transformComponent->velocity.x = -240.0f;
+          inputComponent->enableFlag(InputFlags::Left);
         }
 
         if (e.key.key == SDLK_UP) {
-          transformComponent->acceleration.y -= 600.0f;
+          inputComponent->enableFlag(InputFlags::Up);
         }
       }
 
       if (e.type == SDL_EVENT_KEY_UP) {
         if (e.key.key == SDLK_RIGHT) {
-          transformComponent->velocity.x = 0.0f;
+          inputComponent->disableFlag(InputFlags::Right);
         }
 
         if (e.key.key == SDLK_LEFT) {
-          transformComponent->velocity.x = 0.0f;
+          inputComponent->disableFlag(InputFlags::Left);
         }
 
         if (e.key.key == SDLK_UP) {
-          transformComponent->acceleration.y -= 0.0f;
+          inputComponent->disableFlag(InputFlags::Up);
         }
       }
     }

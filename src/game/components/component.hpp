@@ -12,6 +12,7 @@ enum ComponentTypes {
   Inventory = 1 << 2,
   StaticSprite = 1 << 3,
   AnimatedSprite = 1 << 4,
+  Input = 1 << 5,
 };
 
 struct Component {
