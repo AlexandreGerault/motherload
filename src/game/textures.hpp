@@ -3,7 +3,8 @@
 
 enum TextureId {
   PLAYER_FALL,
-  PLAYER_RUN,
+  PLAYER_RUN_RIGHT,
+  PLAYER_RUN_LEFT,
 
   DIRT,
 };

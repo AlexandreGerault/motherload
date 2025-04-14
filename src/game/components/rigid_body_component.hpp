@@ -1,8 +1,9 @@
 #ifndef RIGID_BODY_COMPONENT_H
 #define RIGID_BODY_COMPONENT_H
+
 #include "component.hpp"
 
-namespace mth {
+namespace mth::components {
 struct RigidBodyComponent final : Component {
   bool useGravity{false};
 
@@ -43,8 +44,8 @@ struct RigidBodyComponentBuilder {
 
   RigidBodyComponentBuilder withoutCollision();
 
-  RigidBodyComponent create();
+  RigidBodyComponent create() const;
 };
-}  // namespace mth
+}  // namespace mth::components
 
 #endif  // RIGID_BODY_COMPONENT_H

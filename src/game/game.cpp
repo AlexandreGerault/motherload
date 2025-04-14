@@ -4,9 +4,6 @@
 #include <SDL3/SDL_log.h>
 #include <SDL3/SDL_timer.h>
 
-#include <iostream>
-
-#include "./textures.hpp"
 #include "components/animated_sprite_component.hpp"
 #include "components/rigid_body_component.hpp"
 #include "components/static_sprite_component.hpp"
@@ -14,10 +11,12 @@
 #include "sdl/sdl_renderer.hpp"
 #include "systems/input_system.hpp"
 #include "systems/render_system.hpp"
+#include "textures.hpp"
 #include "world.hpp"
 
 using namespace mth;
-using mth::components::TransformComponent;
+using namespace mth::components;
+using components::TransformComponent;
 
 Game::Game() {
   SDL_CreateWindowAndRenderer("Motherload Rebirth", 860, 640,
@@ -44,48 +43,45 @@ void Game::loop() {
   SDL_Event e;
   SDL_zero(e);
 
-  World my_world{};
+  World myWorld{};
 
-  m_textureRegistry.registerTexture(PLAYER_RUN, "assets/run.png");
+  m_textureRegistry.registerTexture(PLAYER_RUN_RIGHT, "assets/run.png");
   m_textureRegistry.registerTexture(PLAYER_FALL, "assets/fall.png");
   m_textureRegistry.registerTexture(DIRT, "assets/default_dirt.png");
 
-  my_world.registerSystem(std::make_unique<RenderSystem>(
+  myWorld.registerSystem(std::make_unique<RenderSystem>(
       std::make_unique<SdlRenderer>(m_renderer, m_textureRegistry)));
-  my_world.registerSystem(std::make_unique<InputSystem>());
-
-  ComponentList player_components{};
+  myWorld.registerSystem(std::make_unique<InputSystem>());
 
   // DIRT BLOCK
-  const auto dirt_texture_component = std::make_shared<StaticSpriteComponent>(
+  const auto dirtTextureComponent = std::make_shared<StaticSpriteComponent>(
       DIRT, Rectangle{0, 0, 16.0f, 16.0f});
-  const auto dirt_physic_component = std::make_shared<RigidBodyComponent>(
-      100.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+  const auto dirtPhysicComponent =
+      std::make_shared<RigidBodyComponent>(RigidBodyComponentBuilder{}
+                                               .withMass(100.0f)
+                                               .withCollision()
+                                               .withDrag(1.f)
+                                               .withoutGravity()
+                                               .create());
+  myWorld.spawnEntity(ComponentList{dirtTextureComponent, dirtPhysicComponent});
 
   // KNIGHT
-  const auto run_texture_component = std::make_shared<AnimatedSpriteComponent>(
-      PLAYER_RUN, m_animationRegistry.get(PLAYER_RUN), 13);
-  const auto fall_texture_component = std::make_shared<AnimatedSpriteComponent>(
+  const auto runTextureComponent = std::make_shared<AnimatedSpriteComponent>(
+      PLAYER_RUN_RIGHT, m_animationRegistry.get(PLAYER_RUN_RIGHT), 13);
+  const auto fallTextureComponent = std::make_shared<AnimatedSpriteComponent>(
       PLAYER_FALL, m_animationRegistry.get(PLAYER_FALL), 13);
-  const auto rigid_body_component =
+  const auto rigidBodyComponent =
       std::make_shared<RigidBodyComponent>(RigidBodyComponentBuilder{}
                                                .withMass(100.0f)
                                                .withCollision()
                                                .withGravity()
-                                               .withDrag(1.f)
+                                               .withDrag(0.f)
                                                .create());
 
-  const auto transform_component = std::make_shared<TransformComponent>();
+  const auto transformComponent = std::make_shared<TransformComponent>();
 
-  player_components.push_back(rigid_body_component);
-  player_components.push_back(run_texture_component);
-  player_components.push_back(transform_component);
-
-  my_world.spawnEntity(
-      ComponentList{rigid_body_component, run_texture_component});
-
-  my_world.spawnEntity(
-      ComponentList{dirt_texture_component, dirt_physic_component});
+  myWorld.spawnEntity(ComponentList{rigidBodyComponent, transformComponent,
+                                    runTextureComponent});
 
   Uint64 NOW = SDL_GetPerformanceCounter();
   Uint64 LAST = 0;
@@ -106,33 +102,29 @@ void Game::loop() {
 
       if (e.type == SDL_EVENT_KEY_DOWN) {
         if (e.key.key == SDLK_RIGHT) {
-          transform_component->velocity.x = 100.0f;
+          transformComponent->velocity.x = 240.0f;
         }
 
         if (e.key.key == SDLK_LEFT) {
-          transform_component->velocity.x = -100.0f;
+          transformComponent->velocity.x = -240.0f;
         }
 
         if (e.key.key == SDLK_UP) {
-          transform_component->acceleration.y += 100.0f;
+          transformComponent->acceleration.y -= 600.0f;
         }
       }
 
       if (e.type == SDL_EVENT_KEY_UP) {
         if (e.key.key == SDLK_RIGHT) {
-          transform_component->velocity.x = 0.0f;
+          transformComponent->velocity.x = 0.0f;
         }
 
         if (e.key.key == SDLK_LEFT) {
-          transform_component->velocity.x = 0.0f;
+          transformComponent->velocity.x = 0.0f;
         }
 
         if (e.key.key == SDLK_UP) {
-          transform_component->acceleration.y += 100.0f;
-        }
-
-        if (e.key.key == SDLK_UP) {
-          transform_component->acceleration.y += 0.0f;
+          transformComponent->acceleration.y -= 0.0f;
         }
       }
     }
@@ -142,7 +134,7 @@ void Game::loop() {
     SDL_RenderClear(m_renderer);
 
     // Call systems to update our world
-    my_world.update(deltaTime / 1000.0f);
+    myWorld.update(deltaTime / 1000.0f);
 
     // Update screen
     SDL_RenderPresent(m_renderer);

@@ -2,14 +2,20 @@
 
 #include <SDL3_image/SDL_image.h>
 
-#include <iostream>
-
 #include "../textures.hpp"
 
 SdlTextureRegistry::SdlTextureRegistry(SDL_Renderer* renderer)
     : m_renderer(renderer) {}
 
-void SdlTextureRegistry::registerTexture(TextureId id,
+SdlTextureRegistry::~SdlTextureRegistry() {
+  for (auto [id, texture] : m_textures) {
+    SDL_DestroyTexture(texture);
+  }
+
+  m_textures.clear();
+}
+
+void SdlTextureRegistry::registerTexture(const TextureId id,
                                          const std::string& path) {
   // Load the surface from the given path and store it in the m_textures map
   SDL_Surface* surface = IMG_Load(path.c_str());

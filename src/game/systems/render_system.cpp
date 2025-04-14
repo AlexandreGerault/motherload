@@ -1,88 +1,90 @@
 #include "render_system.hpp"
 
-#include <iostream>
-#include <ostream>
 #include <ranges>
 
 #include "../components/animated_sprite_component.hpp"
-#include "../components/rigid_body_component.hpp"
 #include "../components/static_sprite_component.hpp"
+#include "../components/transform_component.hpp"
 #include "../world.hpp"
 
 using namespace mth;
-
-struct StaticSpriteComponent;
+using namespace components;
+using components::AnimatedSpriteComponent;
+using components::StaticSpriteComponent;
+using components::TransformComponent;
 
 RenderSystem::RenderSystem(std::unique_ptr<Renderer> renderer)
     : m_renderer{std::move(renderer)} {}
 
-void RenderSystem::update(World &world, float dt) {
-  const auto static_sprite_entities =
-      world.havingComponents(RigidBody | StaticSprite);
+void RenderSystem::update(World &world, const float dt) {
+  const auto staticSpriteEntities =
+      world.havingComponents(Transform | StaticSprite);
 
-  for (const auto &components : static_sprite_entities | std::views::values) {
-    auto physic_it =
+  for (const auto &components : staticSpriteEntities | std::views::values) {
+    auto transformIt =
         std::ranges::find_if(components, [](const auto &component) {
-          return std::dynamic_pointer_cast<RigidBodyComponent>(component) !=
+          return std::dynamic_pointer_cast<TransformComponent>(component) !=
                  nullptr;
         });
 
-    auto texture_it =
+    auto textureIt =
         std::ranges::find_if(components, [](const auto &component) {
           return std::dynamic_pointer_cast<StaticSpriteComponent>(component) !=
                  nullptr;
         });
 
-    if (physic_it == components.end() || texture_it == components.end()) {
+    if (transformIt == components.end() || textureIt == components.end()) {
       continue;
     }
 
     // Cast the component to position type
-    const auto pos_component =
-        std::dynamic_pointer_cast<RigidBodyComponent>(*physic_it);
-    const auto texture_component =
-        std::dynamic_pointer_cast<StaticSpriteComponent>(*texture_it);
+    const auto transformComponent =
+        std::dynamic_pointer_cast<TransformComponent>(*transformIt);
+    const auto textureComponent =
+        std::dynamic_pointer_cast<StaticSpriteComponent>(*textureIt);
 
-    m_renderer->render(texture_component->m_textureId,
-                       Rectangle{pos_component->x, pos_component->y,
-                                 texture_component->m_clip.width,
-                                 texture_component->m_clip.height},
-                       texture_component->m_clip);
+    m_renderer->render(textureComponent->m_textureId,
+                       Rectangle{transformComponent->position.x,
+                                 transformComponent->position.y,
+                                 textureComponent->m_clip.width,
+                                 textureComponent->m_clip.height},
+                       textureComponent->m_clip);
   }
 
-  const auto animated_sprite_entities =
-      world.havingComponents(RigidBody | AnimatedSprite);
+  const auto animatedSpriteEntities =
+      world.havingComponents(Transform | AnimatedSprite);
 
-  for (const auto &components : animated_sprite_entities | std::views::values) {
-    auto physic_it =
+  for (const auto &components : animatedSpriteEntities | std::views::values) {
+    auto transformIt =
         std::ranges::find_if(components, [](const auto &component) {
-          return std::dynamic_pointer_cast<RigidBodyComponent>(component) !=
+          return std::dynamic_pointer_cast<TransformComponent>(component) !=
                  nullptr;
         });
 
-    auto texture_it =
+    auto textureIt =
         std::ranges::find_if(components, [](const auto &component) {
           return std::dynamic_pointer_cast<AnimatedSpriteComponent>(
                      component) != nullptr;
         });
 
-    if (physic_it == components.end() || texture_it == components.end()) {
+    if (transformIt == components.end() || textureIt == components.end()) {
       continue;
     }
 
     // Cast the component to position type
-    const auto pos_component =
-        std::dynamic_pointer_cast<RigidBodyComponent>(*physic_it);
-    const auto texture_component =
-        std::dynamic_pointer_cast<AnimatedSpriteComponent>(*texture_it);
+    const auto transformComponent =
+        std::dynamic_pointer_cast<TransformComponent>(*transformIt);
+    const auto textureComponent =
+        std::dynamic_pointer_cast<AnimatedSpriteComponent>(*textureIt);
 
-    const Rectangle currentClip = texture_component->getCurrentClip();
+    const Rectangle currentClip = textureComponent->getCurrentClip();
 
-    m_renderer->render(texture_component->textureId,
-                       Rectangle{pos_component->x, pos_component->y,
+    m_renderer->render(textureComponent->textureId,
+                       Rectangle{transformComponent->position.x,
+                                 transformComponent->position.y,
                                  currentClip.width, currentClip.height},
                        currentClip);
 
-    texture_component->addTime(dt);
+    textureComponent->addTime(dt);
   }
 }

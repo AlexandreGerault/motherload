@@ -6,22 +6,24 @@
 #include "../textures.hpp"
 #include "component.hpp"
 
-namespace mth {
+namespace mth::components {
+
+using namespace mth::math;
+
 struct AnimatedSpriteComponent final : Component {
   ComponentTypes type() override;
   explicit AnimatedSpriteComponent(TextureId textureId,
-                                   std::vector<math::Rectangle> clips,
-                                   int framerate);
+                                   std::vector<Rectangle> clips, int framerate);
 
   int currentFrameIndex() const;
-  math::Rectangle getCurrentClip() const;
+  Rectangle getCurrentClip() const;
   void addTime(float dt);
 
   float elapsedTime{0};
   int framerate{};
   TextureId textureId;
-  std::vector<math::Rectangle> clips{};
+  std::vector<Rectangle> clips{};
 };
-}  // namespace mth
+}  // namespace mth::components
 
 #endif  // ANIMATED_SPRITE_COMPONENT_HPP

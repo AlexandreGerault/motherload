@@ -5,6 +5,7 @@
 #include "systems/physic_system.hpp"
 
 using namespace mth;
+using components::ComponentList;
 
 World::World() { registerSystem(std::make_unique<PhysicSystem>()); }
 

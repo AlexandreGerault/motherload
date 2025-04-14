@@ -5,8 +5,8 @@
 #include "../textures.hpp"
 #include "component.hpp"
 
-namespace mth {
-using namespace math;
+namespace mth::components {
+using namespace mth::math;
 
 struct StaticSpriteComponent final : Component {
   StaticSpriteComponent() = delete;
@@ -16,6 +16,6 @@ struct StaticSpriteComponent final : Component {
   TextureId m_textureId;
   Rectangle m_clip;
 };
-}  // namespace mth
+}  // namespace mth::components
 
 #endif  // TEXTURE_COMPONENT_HPP

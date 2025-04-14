@@ -11,7 +11,7 @@
 class SdlTextureRegistry {
  public:
   explicit SdlTextureRegistry(SDL_Renderer* renderer);
-  ~SdlTextureRegistry() = default;
+  ~SdlTextureRegistry();
 
   void registerTexture(TextureId, const std::string& path);
   SDL_Texture* get(TextureId id);

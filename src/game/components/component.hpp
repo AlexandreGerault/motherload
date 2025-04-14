@@ -5,7 +5,7 @@
 #include <memory>
 #include <vector>
 
-namespace mth {
+namespace mth::components {
 enum ComponentTypes {
   RigidBody = 1 << 0,
   Transform = 1 << 1,
@@ -24,6 +24,6 @@ struct InventoryComponent final : Component {
 };
 
 typedef std::vector<std::shared_ptr<Component>> ComponentList;
-}  // namespace mth
+}  // namespace mth::components
 
 #endif  // COMPONENT_HPP

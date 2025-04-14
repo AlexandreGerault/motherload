@@ -7,14 +7,13 @@ using mth::math::Vec2;
 
 namespace mth::components {
 struct TransformComponent final : Component {
-  Vec2 position;
-  Vec2 velocity;
-  Vec2 acceleration;
+  TransformComponent() = default;
 
-  TransformComponent()
-      : position{0.0f, 0.0f}, velocity{0.0f, 0.0f}, acceleration{0.0f, 0.0f} {}
+  Vec2 position{0.0f, 0.0f};
+  Vec2 velocity{0.0f, 0.0f};
+  Vec2 acceleration{0.0f, 0.0f};
 
-  ComponentTypes type() { return Transform; }
+  ComponentTypes type() override;
 };
 }  // namespace mth::components
 

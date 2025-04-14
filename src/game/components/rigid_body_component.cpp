@@ -1,23 +1,26 @@
 #include "rigid_body_component.hpp"
 
-using namespace mth;
+using namespace mth::components;
 
-RigidBodyComponent::RigidBodyComponent(float mass, float drag, bool useGravity,
-                                       bool collisionDetection)
-    : mass{mass},
+RigidBodyComponent::RigidBodyComponent(const float mass, const float drag,
+                                       const bool useGravity,
+                                       const bool collisionDetection)
+    : useGravity{useGravity},
+      mass{mass},
       drag{drag},
-      useGravity{useGravity},
       collisionDetection{collisionDetection} {}
 
 ComponentTypes RigidBodyComponent::type() { return RigidBody; }
 
-RigidBodyComponentBuilder RigidBodyComponentBuilder::withMass(float mass) {
+RigidBodyComponentBuilder RigidBodyComponentBuilder::withMass(
+    const float mass) {
   this->mass = mass;
 
   return *this;
 }
 
-RigidBodyComponentBuilder RigidBodyComponentBuilder::withDrag(float drag) {
+RigidBodyComponentBuilder RigidBodyComponentBuilder::withDrag(
+    const float drag) {
   this->drag = drag;
 
   return *this;
@@ -47,6 +50,6 @@ RigidBodyComponentBuilder RigidBodyComponentBuilder::withoutCollision() {
   return *this;
 }
 
-RigidBodyComponent RigidBodyComponentBuilder::create() {
-  return RigidBodyComponent(mass, drag, useGravity, collisionDetection);
+RigidBodyComponent RigidBodyComponentBuilder::create() const {
+  return RigidBodyComponent{mass, drag, useGravity, collisionDetection};
 }

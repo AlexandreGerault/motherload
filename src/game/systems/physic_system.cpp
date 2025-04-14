@@ -9,12 +9,13 @@
 #include "../world.hpp"
 
 using namespace mth;
-using mth::components::TransformComponent;
+using namespace mth::components;
+using components::TransformComponent;
 
 void PhysicSystem::update(World &world, const float dt) {
-  const auto rigid_bodies = world.havingComponents(RigidBody | Transform);
+  const auto physicObjects = world.havingComponents(Transform | RigidBody);
 
-  for (const auto &components : rigid_bodies | std::views::values) {
+  for (const auto &components : physicObjects | std::views::values) {
     auto rigidBodyIterator =
         std::ranges::find_if(components, [](const auto &component) {
           return std::dynamic_pointer_cast<RigidBodyComponent>(component) !=
@@ -34,13 +35,26 @@ void PhysicSystem::update(World &world, const float dt) {
 
     // Cast the component to position type
     const auto transformComponent =
-        std::dynamic_pointer_cast<TransformComponent>(*rigidBodyIterator);
+        std::dynamic_pointer_cast<TransformComponent>(*transformIterator);
 
-    transformComponent->position.x += transformComponent->velocity.x * dt;
+    const auto rigidBodyComponent =
+        std::dynamic_pointer_cast<RigidBodyComponent>(*rigidBodyIterator);
 
-    transformComponent->velocity.y +=
-        mth::constants::PIXEL_BY_METER * mth::constants::GRAVITY * dt;
-    transformComponent->position.y += transformComponent->velocity.y * dt;
+    const math::Vec2 weight =
+        math::Vec2{0.0f, rigidBodyComponent->useGravity ? 1.0f : 0.0f} *
+        rigidBodyComponent->mass * constants::GRAVITY;
+
+    const math::Vec2 friction =
+        Vec2{0.0f, -1.0f} * transformComponent->velocity.y *
+        transformComponent->velocity.y * rigidBodyComponent->drag;
+
+    const math::Vec2 acceleration = (1 / rigidBodyComponent->mass) *
+                                    (weight + friction) *
+                                    constants::PIXEL_BY_METER;
+
+    transformComponent->velocity += acceleration * dt;
+
+    transformComponent->position += transformComponent->velocity * dt;
 
     if (transformComponent->position.y > 600.0f) {
       transformComponent->position.y = 600.0f;

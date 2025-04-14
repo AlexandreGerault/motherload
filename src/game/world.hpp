@@ -7,7 +7,6 @@
 #include <vector>
 
 #include "components/component.hpp"
-#include "sdl/sdl_texture_registry.hpp"
 #include "systems/system.hpp"
 
 namespace mth {
@@ -25,16 +24,17 @@ class World {
  public:
   World();
 
-  void spawnEntity(ComponentList &&components);
+  void spawnEntity(components::ComponentList &&components);
   void killEntity(Entity entity);
 
   void registerSystem(std::unique_ptr<System> system);
 
   void update(float dt);
-  std::unordered_map<Entity, ComponentList> havingComponents(int flags);
+  std::unordered_map<Entity, components::ComponentList> havingComponents(
+      int flags);
 
  private:
-  std::unordered_map<Entity, ComponentList> m_components;
+  std::unordered_map<Entity, components::ComponentList> m_components;
   std::vector<std::unique_ptr<System>> m_systems;
   EntityFactory m_entityFactory;
 };

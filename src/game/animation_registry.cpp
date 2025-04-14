@@ -4,7 +4,7 @@ using namespace mth;
 using namespace mth::math;
 
 AnimationRegistry::AnimationRegistry() {
-  m_animations.emplace(PLAYER_RUN,
+  m_animations.emplace(PLAYER_RUN_RIGHT,
                        std::vector{Rectangle{40.f, 40.f, 35.0f, 40.0f},
                                    Rectangle{160.f, 40.f, 30.0f, 40.0f},
                                    Rectangle{285.0f, 40.f, 30.0f, 40.0f},
