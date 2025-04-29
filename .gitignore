@@ -1,9 +1,13 @@
 # Xmake cache
 .xmake/
+.cache/
 build/
+compile_commands.json
+compile_flags.txt
 
 # MacOS Cache
 .DS_Store
 
 assets
 cmake-build-debug
+CMakeLists.txt
